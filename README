@@ -1,0 +1,12 @@
+
+A script to pull San Francisco census data for the ASA workshop, by Pete Warden <pete@petewarden.com>
+
+It has an array defining what statistics we're interested in, and loops through them to pull in tract-level values for each of them. This is then organized into CSV format, and printed to stdout. To use it, make sure you have the Sunlight Foundation's 'census' Python module installed, get your own Census API key from http://www.census.gov/developers/, and then run:
+
+./gather_census.py > my_statistics.csv
+
+If you look at my_statistics.csv (or the prebuilt CSV in the repo), you'll see a header row giving a human-readable name for each statistic, and a year. The first column is the tract ID (see http://www2.census.gov/geo/maps/dc10map/tract/st06_ca/c06075_san_francisco/DC10CT_C06075_004.pdf for a map of them in SF), and then each row has the statistics for that tract.
+
+You can add your own statistics by editing the WANTED_CODES array. Currently we're looking at the years 2010 and 2000, so you'll need to look up the code for the ones you want in the data dictionaries at http://www.census.gov/prod/cen2010/doc/sf1.pdf and http://www.census.gov/prod/cen2000/doc/sf1.pdf. Generally the 2000 version of a 2010 code is the same, apart from the removal of a '0' in the middle, e.g. 'P0030001' in 2010 is 'P003001' in 2000. Once you've got the codes and a human-readable label, you can add a new row to the WANTED_CODES array and re-run the script.
+
+Some census tracts are split or merged over time, so in those cases you'll see a sparse row with some missing values for each year. This will be a bigger problem if we move further back in time (e.g. to 1990), and we'll have to figure out how to best normalize the data so we can do meaningful comparisons.
